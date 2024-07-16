@@ -15,9 +15,14 @@ rust-version = "1.79"
 tauri-build = { version = "1.5.3", features = [] }
 
 [dependencies]
-serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.7.0", features = [] }
+rsa = "0.9.6"
+base64 = "0.22.1"
+serde = "1.0"
+serde_json = "1.0"
+reqwest = { version = "0.11", features = ["blocking", "json"] }
+tokio = { version = "1", features = ["full"] }
+uuid = { version = "1.10.0", features = ["v4", "js"] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.
