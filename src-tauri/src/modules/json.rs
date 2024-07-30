@@ -3,24 +3,24 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct PostRegister {
-    uuid: String,
-    publickey: String,
+    pub uuid: String,
+    pub publickey: String,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct PostGet {
-    uuid: String,
-    gettime: String,
-    gettimesignature: String,
+    pub uuid: String,
+    pub gettime: String,
+    pub gettimesignature: String,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct PostSend {
-    sender: String,
-    receiver: String,
-    content: String,
-    sendtime: String,
-    sendtimesignature: String,
+    pub sender: String,
+    pub receiver: String,
+    pub content: String,
+    pub sendtime: String,
+    pub sendtimesignature: String,
 }
 
 pub fn to_hashmap<Type: Serialize>(obj: &Type) -> HashMap<String, String> {
