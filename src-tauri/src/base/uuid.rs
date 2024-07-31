@@ -1,10 +1,6 @@
 use {
-    crate::{
-        modules::network,
-        base,
-        base::filesystem
-    },
-    uuid::Uuid
+    crate::{base, base::filesystem, modules::network},
+    uuid::Uuid,
 };
 
 fn generate() -> String {
@@ -16,28 +12,22 @@ pub fn register(public_key: String) -> String {
     let mut uuid = generate();
     base::log(
         &format!("Cheking uuid: {}-****-************", &uuid[..18]),
-        2
+        2,
     );
-    
+
     let mut status_code = network::register(uuid.clone(), public_key.clone());
-    base::log(
-        &format!("Status code: {}", &status_code),
-        2
-    );
-    
+    base::log(&format!("Status code: {}", &status_code), 2);
+
     while !(status_code == 200) {
         uuid = generate();
         base::log(
             &format!("Cheking uuid: {}-****-************", &uuid[..18]),
-            2
+            2,
         );
 
         status_code = network::register(uuid.clone(), public_key.clone());
-        base::log(
-            &format!("Status code: {}", &status_code),
-            2
-        );
-    };
+        base::log(&format!("Status code: {}", &status_code), 2);
+    }
 
     uuid
 }

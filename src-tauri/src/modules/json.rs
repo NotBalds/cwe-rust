@@ -1,5 +1,5 @@
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct PostRegister {
@@ -14,10 +14,18 @@ pub struct PostGet {
     pub gettimesignature: String,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Message {
+    pub sender: String,
+    pub content: String,
+}
+
+pub type GetResponse = Vec<Message>;
+
 #[derive(Serialize, Deserialize)]
 pub struct PostSend {
-    pub sender: String,
     pub receiver: String,
+    pub sender: String,
     pub content: String,
     pub sendtime: String,
     pub sendtimesignature: String,
@@ -25,7 +33,8 @@ pub struct PostSend {
 
 pub fn to_hashmap<Type: Serialize>(obj: &Type) -> HashMap<String, String> {
     let json_value = serde_json::to_value(obj).unwrap();
-    json_value.as_object()
+    json_value
+        .as_object()
         .unwrap()
         .iter()
         .filter_map(|(key, value)| {

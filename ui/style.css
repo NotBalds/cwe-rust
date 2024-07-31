@@ -1,3 +1,7 @@
+* {
+	transition: 0.3s;
+}
+
 html {
 	width: 100%;
 	height: 100%;
@@ -19,5 +23,60 @@ main {
 	height: 98%;
 	background-color: #313244;
 	border-radius: 1em;
+	display: flex;
+	flex-direction: column;
+    align-items: center;
 }
 
+.bar {
+	width: 98.5%;
+	height: 5vh;
+	margin: 0.5em;
+	background-color: #44475a;
+	border-radius: 0.7em;
+	display: flex;
+	flex-direction: row;
+    align-items: center;
+}
+
+.bar > * {
+	margin: 1.5vw;
+	text-decoration: none;
+}
+
+.bar > .previous {
+	margin-right: 0.4vw;
+	width: 3vh;
+	height: 3vh;
+	background-color: #6c7086;
+	border-radius: 3vh;
+}
+
+.bar > .previous:hover {
+    background-color: #1e1e2e;
+}
+
+.bar > .previous:target {
+    background-color: #1e1e2e;
+}
+
+.bar > .previous:active {
+    background-color: #74c7ec;
+}
+
+.bar > .reload {
+	margin-left: 0.4vw;
+	width: 3vh;
+	height: 3vh;
+	background-color: #6c7086;
+	border-radius: 3vh;
+}
+
+.bar > .reload:hover {
+    background-color: #1e1e2e;
+}
+
+.bar > .contact_bar {
+	font-size: 3vh;
+	transition: 0s;
+}
