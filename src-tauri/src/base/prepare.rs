@@ -102,14 +102,14 @@ pub fn run(passphrase: String, force: bool) -> io::Result<()> {
         // Converting sys public key from PEM-Base64-String to DER-Base64-String
         base::log("Converting sys public key from PEM-Base64-String to DER-Base64-String...", 2);
 
-        let sys_public_key_as_b64: String = crypting::public_from_pem_to_base64(sys_public_key);
+        let sys_public_key_as_b64: String = crypting::public_from_pem_to_base64(sys_public_key.clone());
 
         base::log("Converted sys public key from PEM-Base64-String to DER-Base64-String", 0);
 
         // Registration unused uuid
         base::log("Registration unused uuid...", 2);
 
-        let uuid = uuid::register(sys_public_key_as_b64);
+        let uuid = uuid::register(sys_public_key);
 
         base::log("Registered unused uuid", 0);
 

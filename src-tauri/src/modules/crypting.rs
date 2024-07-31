@@ -71,4 +71,6 @@ pub fn sign(data: String, passphrase: String) -> String {
     let signature = signer.sign_to_vec()
         .expect("Can't sign data");
     b64.encode(&signature)
+    
+    // format!("{}\n{}\n{}", "-----BEGIN SIGNATURE-----", signature, "-----END SIGNATURE-----")
 }
