@@ -3,27 +3,38 @@
 mod modules;
 mod base;
 
-use modules::{network, crypting};
-use base::filesystem;
-
 fn main() {
-    let uuid = filesystem::cat(
-        &filesystem::new_path("uuid")
-        ).unwrap();
-    let status_code = network::register(uuid, "Hello".to_string());
-    println!("{}", status_code);
+    base::prepare::run(
+        "Hello world!".to_string(), 
+        true
+    ).expect("Error while running prepare function");
 
-    let enc = crypting::xor("Hello world!".to_string(), "HUI".to_string());
+    let sys_public_key = base::filesystem::cat(
+        &base::filesystem::new_path("base-keys/sys-key.pub")
+    );
+    println!("PubKey: {}", sys_public_key);
+    
+    base::log(
+        &format!("PubKey: {}", 
+            modules::crypting::public_from_pem_to_base64(sys_public_key)),
+        3);
+    println!("UUID: {}", base::uuid::get());
+    println!("UNIX TIME: {}", base::unix_time().to_string());
+    println!("Sign: {}", modules::crypting::sign(
+            base::unix_time().to_string(),
+            "Hello world!".to_string()
+        ));
 
-    println!("{}", enc);
+    println!("Get Status code: {}", modules::network::get(
+        base::uuid::get(),
+        base::unix_time().to_string(),
+        modules::crypting::sign(
+            base::unix_time().to_string(),
+            "Hello world!".to_string()
+        )
+    ));
 
-    let keys = crypting::gen_keys("hello world!".to_string());
-    println!("{}", keys.0);
-    println!("{}", keys.1);
-
-    // let _ = basic::prepare();
-
-	// tauri::Builder::default()
-	// 	.run(tauri::generate_context!())
-	// 	.expect("error while running tauri application");
+	tauri::Builder::default()
+		.run(tauri::generate_context!())
+	    .expect("error while running tauri application");
 }

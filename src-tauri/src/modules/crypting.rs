@@ -1,12 +1,22 @@
 use {
     openssl::{
-        rsa::Rsa, 
-        symm::Cipher
+        rsa::{
+            Rsa,
+            Padding
+        },
+        sign::{
+            Signer,
+            Verifier
+        },
+        pkey::PKey,
+        hash::MessageDigest,
+        symm::Cipher,
     },
     base64::{
-            prelude::BASE64_STANDARD as b64, 
-            Engine
-        }
+        prelude::BASE64_STANDARD as b64, 
+        Engine
+    },
+    crate::base::filesystem
 };
 
 const BITS: u32 = 2048;
@@ -39,4 +49,26 @@ pub fn gen_keys(passphrase: String) -> (String, String) {
 pub fn public_from_pem_to_base64(public_key_pem: String) -> String {
     let public_key = Rsa::public_key_from_pem_pkcs1(public_key_pem.as_bytes()).expect("Can't convert public key from pem to object");
     b64.encode(public_key.public_key_to_der().unwrap())
+}
+
+pub fn sign(data: String, passphrase: String) -> String {
+    let rsa = Rsa::private_key_from_pem_passphrase(
+        filesystem::cat(
+            &filesystem::new_path("base-keys/sys-key")
+        ).as_bytes(),
+        passphrase.as_bytes()
+    ).expect("Can't convert private key from pem to object");
+    
+    let private_key = PKey::from_rsa(rsa).expect("Can't convert private key from object to PKey");
+
+    let mut signer = Signer::new(MessageDigest::sha256(), &private_key)
+        .expect("Can't create signer");
+    signer.set_rsa_padding(Padding::PKCS1)
+        .expect("Can't set rsa padding");
+    signer.update(data.as_bytes())
+        .expect("Can't update data");
+        
+    let signature = signer.sign_to_vec()
+        .expect("Can't sign data");
+    b64.encode(&signature)
 }

@@ -2,12 +2,16 @@ use reqwest::blocking::Client;
 use std::collections::HashMap;
 use crate::modules::json;
 use crate::modules::config;
+use crate::base;
 
 fn post(url: String, body: HashMap<String, String>) -> u16 {
-   let client = Client::new();
+    let client = Client::new();
     let resp = match client.post(url).json(&body).send() {
         Ok(resp) => resp.status().as_u16(),
-        Err(err) => panic!("Error: {}", err)
+        Err(err) => base::log(
+            &err.to_string(), 
+            1
+        )
     };
     resp
 }
